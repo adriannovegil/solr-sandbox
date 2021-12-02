@@ -10,13 +10,47 @@ Clone this repo and execute the following command:
 make up
 ```
 
+or, if you prefer
+
+```
+docker-compose up
+```
+
 ## Services
 
 The following services will be started. Some of them are accessible via web:
 
 | Component                                  | Description                                                 | Port      |
 | ---------------------------------------    | --------------------------------------------------------    | -------------------------------    |
-| `xxx`                           | xxx                                                     | [`xxx`](http://localhost:3000)    |
+| `solr1`                                    | [Apache Solr node 1](https://solr.apache.org/)              | [`8981`](http://localhost:8981/) |
+| `solr2`                                    | [Apache Solr node 2](https://solr.apache.org/)              | [`8982`](http://localhost:8982/) |
+| `solr3`                                    | [Apache Solr node 3](https://solr.apache.org/)              | [`8983`](http://localhost:8983/) |
+| `zoo1`                                     | [ZooKeeper node 1](https://zookeeper.apache.org/)           | [`2181`](http://localhost:2181/) |
+| `zoo2`                                     | [ZooKeeper node 2](https://zookeeper.apache.org/)           | [`2182`](http://localhost:2182/) |
+| `zoo3`                                     | [ZooKeeper node 3](https://zookeeper.apache.org/)           | [`2183`](http://localhost:2183/) |
+| `solr-exporter`                            | [Solr Exporter](https://solr.apache.org/guide/7_3/monitoring-solr-with-prometheus-and-grafana.html)                  | [`9854`](http://localhost:9854/) |
+
+## Observability
+
+You can use this repo in combination with the [Observability Sandbox Lite](https://github.com/adriannovegil/observability-sandbox-lite)
+
+The Apache Solr is launched with Prometheus exported activated. To get the metrics just add this code to the Prometheus targets configuration:
+
+```
+  # Apache Solr Sandbox
+  - job_name: 'zoo-keeper-server'
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    scrape_timeout: 15s
+    static_configs:
+      - targets: ['zoo1:7000', 'zoo2:7000', 'zoo3:7000']
+
+  - job_name: 'solr-server'
+    scrape_interval: 15s
+    scrape_timeout: 15s
+    static_configs:
+      - targets: [solr-exporter:9854]
+```
 
 ## Contributing
 
