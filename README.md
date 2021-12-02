@@ -52,6 +52,15 @@ The Apache Solr is launched with Prometheus exported activated. To get the metri
       - targets: [solr-exporter:9854]
 ```
 
+The Docker Compose file have been configured with the observability network, so you don't need to do nothing to connect all the containers together:
+
+```
+networks:
+  observabilitysandbox:
+    name: observabilitysandbox
+    external: true
+```
+
 ## Contributing
 
 For a complete guide to contributing to the project, see the [Contribution Guide](CONTRIBUTING.md).
